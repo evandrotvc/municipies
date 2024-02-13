@@ -84,7 +84,11 @@ RSpec.describe Municipe do
 
     context 'when municipe is valid' do
       it 'creates municipe' do
-        expect { request }.to change(described_class, :count).by(1)
+        expect do
+          expect do
+            request
+          end.to change(described_class, :count).by(1)
+        end.to have_enqueued_job(UpdateIndexElasticSearchJob)
         expect(response).to have_http_status(:created)
 
         municipe_recorded = described_class.find_by(name: 'Anakim Vader')
@@ -123,7 +127,9 @@ RSpec.describe Municipe do
     context 'when municipe is valid' do
       it 'updates municipe' do
         expect(municipe.name).to eq('Evandro')
-        request
+        expect do
+          request
+        end.to have_enqueued_job(UpdateIndexElasticSearchJob)
 
         expect(municipe.reload.name).not_to eq('Evandro')
         expect(response).to have_http_status(:ok)
