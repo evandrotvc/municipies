@@ -51,7 +51,7 @@ rspec
 
 
 ## Uso da plataforma
-[![](https://github.com/evandrotvc/municipies/blob/main/app/assets/videos/TesteProjeto.mp4)](https://github.com/evandrotvc/municipies/blob/main/app/assets/videos/TesteProjeto.mp4)
+<video width="630" height="300" src="https://github.com/evandrotvc/municipies/assets/51249134/3976f740-43fd-4992-80de-25ae82c5ee43"></video>
 
 
 
