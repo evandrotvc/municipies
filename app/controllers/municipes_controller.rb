@@ -26,6 +26,8 @@ class MunicipesController < ApplicationController
     process_base64_photo if photo_params[:data].present?
 
     if @municipe.save
+      MunicipeMailer.with(municipe: @municipe).welcome.deliver_later
+
       render :show, status: :created
     else
       render :errors, status: :unprocessable_entity
