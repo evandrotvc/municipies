@@ -52,7 +52,7 @@ RSpec.describe Municipe do
     let!(:municipe) { create(:municipe, name: 'Harry Potter') }
 
     it 'indexes the address in Elasticsearch' do
-      @query = {
+      query = {
         query: {
           term: {
             _id: municipe.id.to_s
@@ -63,7 +63,7 @@ RSpec.describe Municipe do
       municipe.__elasticsearch__.index_document
       municipe.class.__elasticsearch__.refresh_index!
 
-      response_elastic = described_class.__elasticsearch__.search(@query)
+      response_elastic = described_class.__elasticsearch__.search(query)
       name_elastic = response_elastic.response['hits']['hits'].first._source['name']
 
       expect(name_elastic).to eq(municipe.name)
@@ -73,7 +73,7 @@ RSpec.describe Municipe do
       municipe.__elasticsearch__.index_document
       municipe.class.__elasticsearch__.refresh_index!
 
-      response_elastic = described_class.__elasticsearch__.search(@query)
+      response_elastic = described_class.__elasticsearch__.search(query)
       name_elastic = response_elastic.response['hits']['hits'].first._source['name']
 
       expect(name_elastic).to eq('Teste')
@@ -89,7 +89,7 @@ RSpec.describe Municipe do
       described_class.__elasticsearch__.refresh_index!
     end
 
-    context 'should filter name municipe in elasticSearch' do
+    context 'when filter name municipe in elasticSearch, must to return' do
       it 'returns municipe matching the query' do
         expect(described_class.search('John').map(&:id)).to include(municipe1.id)
       end
@@ -99,11 +99,13 @@ RSpec.describe Municipe do
       end
 
       it 'returns municipe matching the query cns' do
-        expect(described_class.search('197544549140008').map(&:id)).to include(municipe1.id)
+        expect(described_class.search('197544549140008').map(&:id))
+          .to include(municipe1.id)
       end
 
       it 'does not return municipe not matching the query cns' do
-        expect(described_class.search('197544549140008').map(&:id)).not_to include(municipe2.id)
+        expect(described_class.search('197544549140008').map(&:id))
+          .not_to include(municipe2.id)
       end
     end
   end
