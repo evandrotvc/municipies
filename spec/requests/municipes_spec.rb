@@ -2,12 +2,18 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Municipies' do
-  describe 'GET /municipies' do
-    let!(:municipes) { create_list(:municipe, 3) }
-    let(:request) { get municipes_path }
+RSpec.describe Municipe do
+  let(:json) { response.parsed_body }
 
-    before { request }
+  describe 'GET index' do
+    let!(:municipes) { create_list(:municipe, 3) }
+    let(:request) { get municipes_path, as: :json }
+
+    before do
+      municipes.map { |municipe| municipe.__elasticsearch__.index_document }
+      described_class.__elasticsearch__.refresh_index!
+      request
+    end
 
     it 'returns http success' do
       expect(response).to have_http_status(:ok)
@@ -18,7 +24,9 @@ RSpec.describe 'Municipies' do
     end
 
     context 'when query is present' do
-      let(:request) { get municipes_path, params: { query: municipes.first.name } }
+      let(:request) do
+        get municipes_path, params: { query: municipes.first.name }, as: :json
+      end
 
       it 'returns http success' do
         expect(response).to have_http_status(:ok)
@@ -31,9 +39,9 @@ RSpec.describe 'Municipies' do
     end
   end
 
-  describe 'GET /municipies/:id' do
+  describe 'Show /municipies/:id' do
     let!(:municipe) { create(:municipe) }
-    let(:request) { get municipe_path(municipe) }
+    let(:request) { get municipe_path(municipe), as: :json }
 
     before { request }
 
@@ -42,31 +50,52 @@ RSpec.describe 'Municipies' do
     end
 
     it 'returns municipe' do
-      expect(response.body).to include(municipe.name)
+      expect(json['municipe']['name']).to eq(municipe.name)
+      expect(json['municipe']['cpf']).to eq(municipe.cpf)
+      expect(json['municipe']['cns']).to eq(municipe.cns)
     end
-  end
 
-  describe 'GET /municipies/new' do
-    let(:request) { get new_municipe_path }
+    it 'with the link for details' do
+      expect(json['municipe']['links']['self']).to eq(municipe_path(municipe))
+    end
 
-    before { request }
-
-    it 'returns http success' do
-      expect(response).to have_http_status(:ok)
+    it 'with the link for photo file' do
+      expect(
+        json['municipe']['photo']
+      ).to eq(Base64.strict_encode64(municipe.photo.download))
     end
   end
 
   describe 'POST /municipies' do
     let(:address_params) { attributes_for(:address) }
-    let(:municipe_params) do
-      attributes_for(:municipe).merge(address_attributes: address_params)
+    let(:photo_params) do
+      { data: Base64.strict_encode64(
+        Rails.root.join('spec/support/images/selfie.png').read
+      ) }
     end
-    let(:request) { post municipes_path, params: { municipe: municipe_params } }
+    let(:municipe_params) do
+      attributes_for(:municipe, name: 'Anakim Vader',
+        photo: nil).merge(address_attributes: address_params)
+    end
+    let(:request) do
+      post municipes_path, params: { municipe: municipe_params, photo: photo_params },
+        headers: { accept: 'application/json' }
+    end
 
     context 'when municipe is valid' do
       it 'creates municipe' do
         expect { request }.to change(Municipe, :count).by(1)
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:created)
+
+        municipe_recorded = Municipe.find_by(name: 'Anakim Vader')
+        expect(json['municipe']['name']).to eq(municipe_params[:name])
+        expect(json['municipe']['cpf']).to eq(municipe_params[:cpf])
+        expect(json['municipe']['cns']).to eq(municipe_params[:cns])
+        expect(json['municipe']['phone']).to eq(municipe_params[:phone])
+        expect(json['municipe']['email']).to eq(municipe_params[:email])
+        expect(json['municipe']['status'].to_sym).to eq(municipe_params[:status].to_sym)
+        expect(json['municipe']['photo']).not_to be_nil
+        expect(municipe_recorded.photo).to be_attached
       end
     end
 
@@ -83,22 +112,22 @@ RSpec.describe 'Municipies' do
     end
   end
 
-  describe 'PATCH /municipies/:id' do
-    let!(:municipe) { create(:municipe) }
+  describe 'PUT /municipies/:id' do
+    let!(:municipe) { create(:municipe, name: 'Evandro') }
     let(:new_params) { attributes_for(:municipe) }
-    let(:request) { patch municipe_path(municipe), params: { municipe: new_params } }
+    let(:request) do
+      put municipe_path(municipe), params: { municipe: new_params },
+        headers: { accept: 'application/json' }
+    end
 
     context 'when municipe is valid' do
-      before do
-        request
-      end
-
-      it 'returns http ok' do
-        expect(response).to have_http_status(:ok)
-      end
-
       it 'updates municipe' do
-        expect(municipe.reload.name).to eq(new_params[:name])
+        expect(municipe.name).to eq('Evandro')
+        request
+
+        expect(municipe.reload.name).not_to eq('Evandro')
+        expect(response).to have_http_status(:ok)
+        expect(municipe.name).to eq(new_params[:name])
       end
     end
 
@@ -114,4 +143,5 @@ RSpec.describe 'Municipies' do
       end
     end
   end
+
 end
