@@ -51,7 +51,8 @@ rspec
 
 
 ## Uso da plataforma
-![alt text](https://github.com/evandrotvc/municipies/blob/main/app/assets/videos/TesteProjeto.mp4)
+[![](https://github.com/evandrotvc/municipies/blob/main/app/assets/videos/TesteProjeto.mp4)](https://github.com/evandrotvc/municipies/blob/main/app/assets/videos/TesteProjeto.mp4)
+
 
 
 ### Tooltips de erros de validações
