@@ -50,5 +50,11 @@ jobs:
           echo $ELASTICSEARCH_URL
           curl -fsSL "$ELASTICSEARCH_URL/_cat/health?h=status"
 
+      - name: Verify Redis connection from host
+        env:
+          REDIS_URL: redis://redis:6379/0
+        run: |
+          echo $REDIS_URL
+
       - name: Run RSpec tests
         run: bundle exec rspec
