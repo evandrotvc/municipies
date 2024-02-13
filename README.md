@@ -48,7 +48,7 @@ yarn
 yarn dev
 ```
 
-## Tests
+## Tests (Rspec)
 
 No terminal, caso queira rodar os testes, basta rodar o comando anterior e o comando a seguir.
 ```
@@ -68,11 +68,11 @@ rspec
 ![alt text](https://github.com/evandrotvc/municipies/blob/main/app/assets/images/toast_test.png)
 
 ## Examples
-- Mailer
+### Mailer
 ![alt text](https://github.com/evandrotvc/municipies-app/blob/main/app/assets/images/mailer.png)
 ![alt text](image.png)
 
-- SMS (exemplo)
+### SMS (exemplo)
 ![alt text](https://github.com/evandrotvc/municipies-app/blob/main/app/assets/images/sms.jpeg)
 
 
