@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Municipe < ApplicationRecord
-  # include Searchable
+  include Searchable
 
   has_one_attached :photo
 

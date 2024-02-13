@@ -7,13 +7,10 @@ class MunicipesController < ApplicationController
     if params[:query].present?
       query = params[:query].downcase
       query = I18n.transliterate(query)
-      @municipes = Municipe.where('lower(unaccent(name)) ilike ?',
-        "%#{query}%").order_by_name
+      @municipes = Municipe.search(query)
     else
       @municipes = Municipe.order_by_name
     end
-    # if params[:query].present?
-    #   @municipes = Municipe.search(params[:query])
   end
 
   def show; end

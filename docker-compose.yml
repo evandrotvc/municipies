@@ -76,22 +76,22 @@ services:
       RAILS_ENV: development
     entrypoint: chmod +x ./entrypoints/sidekiq-entrypoint.sh
 
-  # elasticsearch:
-  #   image: docker.elastic.co/elasticsearch/elasticsearch:6.8.21
-  #   container_name: elasticsearch
-  #   volumes:
-  #     - .:/app
-  #   ports:
-  #     - 9200:9200
-  #     - 9300:9300
-  #   environment:
-  #     - cluster.name=docker-cluster
-  #     - bootstrap.memory_lock=true
-  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-  #   ulimits:
-  #     memlock:
-  #       soft: -1
-  #       hard: -1
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.21
+    container_name: elasticsearch
+    volumes:
+      - .:/app
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
 
 
 

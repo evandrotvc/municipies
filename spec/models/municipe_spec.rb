@@ -51,7 +51,7 @@ RSpec.describe Municipe do
   describe 'should index fields in elasticSearch' do
     let!(:municipe) { create(:municipe, name: 'Harry Potter') }
 
-    xit 'indexes the address in Elasticsearch' do
+    it 'indexes the address in Elasticsearch' do
       @query = {
         query: {
           term: {
@@ -81,7 +81,7 @@ RSpec.describe Municipe do
   end
 
   describe '#search' do
-    let!(:municipe1) { create(:municipe, name: 'John Doe', cns: '197544549140008') }
+    let!(:municipe1) { create(:municipe, name: 'Jóhn Doe', cns: '197544549140008') }
     let!(:municipe2) { create(:municipe, name: 'Jane Doe', cns: '278244365930009') }
 
     before do
@@ -90,19 +90,19 @@ RSpec.describe Municipe do
     end
 
     context 'should filter name municipe in elasticSearch' do
-      xit 'returns municipe matching the query' do
+      it 'returns municipe matching the query' do
         expect(described_class.search('John').map(&:id)).to include(municipe1.id)
       end
 
-      xit 'does not return municipe not matching the query' do
+      it 'does not return municipe not matching the query' do
         expect(described_class.search('John').map(&:id)).not_to include(municipe2.id)
       end
 
-      xit 'returns municipe matching the query cns' do
+      it 'returns municipe matching the query cns' do
         expect(described_class.search('197544549140008').map(&:id)).to include(municipe1.id)
       end
 
-      xit 'does not return municipe not matching the query cns' do
+      it 'does not return municipe not matching the query cns' do
         expect(described_class.search('197544549140008').map(&:id)).not_to include(municipe2.id)
       end
     end

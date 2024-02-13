@@ -10,6 +10,8 @@ RSpec.describe Municipe do
     let(:request) { get municipes_path, as: :json }
 
     before do
+      municipes.map { |municipe| municipe.__elasticsearch__.index_document }
+      described_class.__elasticsearch__.refresh_index!
       request
     end
 
