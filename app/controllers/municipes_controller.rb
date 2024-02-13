@@ -9,15 +9,11 @@ class MunicipesController < ApplicationController
       query = I18n.transliterate(query)
       @municipes = Municipe.where('lower(unaccent(name)) ilike ?',
         "%#{query}%").order_by_name
-      @municipes = Municipe.search(params[:query])
     else
       @municipes = Municipe.order_by_name
     end
     # if params[:query].present?
     #   @municipes = Municipe.search(params[:query])
-    # else
-    #   @municipes = Municipe.order_by_name
-    # end
   end
 
   def show; end
@@ -40,7 +36,6 @@ class MunicipesController < ApplicationController
   end
 
   def update
-    byebug
     process_base64_photo if params[:photo].present?
 
     if @municipe.update(municipe_params)

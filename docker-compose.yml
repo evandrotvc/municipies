@@ -36,8 +36,8 @@ services:
     read_only: false
     restart: always
     entrypoint: ./entrypoints/docker-entrypoint.sh
-    # links:
-    #   - mailcatcher
+    links:
+      - mailcatcher
 
   app-migrations:
     container_name: app-migrations
@@ -55,44 +55,43 @@ services:
       RAILS_ENV: development
     entrypoint: ./entrypoints/setup-db.sh
 
-  # mailcatcher:
-  #   image: yappabe/mailcatcher
-  #   ports:
-  #     - "1025:1025"
-  #     - "1080:1080"
+  mailcatcher:
+    image: yappabe/mailcatcher
+    ports:
+      - "1025:1025"
+      - "1080:1080"
 
-  # sidekiq:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   depends_on:
-  #     - app
-  #     - postgres
-  #     - redis
-  #   volumes:
-  #     - .:/app
-  #   env_file: .env
-  #   environment:
-  #     RAILS_ENV: development
-  #   entrypoint: chmod +x ./entrypoints/sidekiq-entrypoint.sh
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.21
-    container_name: elasticsearch
+  sidekiq:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - app
+      - postgres
+      - redis
     volumes:
       - .:/app
-    ports:
-      - 9200:9200
-      - 9300:9300
+    env_file: .env
     environment:
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-        # sysctl -w vm.max_map_count=262144
+      RAILS_ENV: development
+    entrypoint: chmod +x ./entrypoints/sidekiq-entrypoint.sh
+
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:6.8.21
+  #   container_name: elasticsearch
+  #   volumes:
+  #     - .:/app
+  #   ports:
+  #     - 9200:9200
+  #     - 9300:9300
+  #   environment:
+  #     - cluster.name=docker-cluster
+  #     - bootstrap.memory_lock=true
+  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
 
 
 

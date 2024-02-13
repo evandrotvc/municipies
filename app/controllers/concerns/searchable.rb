@@ -24,7 +24,7 @@ module Searchable
           }
         }
       }
-      byebug
+
       __elasticsearch__.search(params).records.to_a
     end
   end

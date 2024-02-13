@@ -16,6 +16,9 @@ copie o arquivo .env.test com o nome .env
 ```
 depois rode
 ```
+sudo sysctl -w vm.max_map_count=262144
+```
+```
 docker compose build
 ```
 
