@@ -24,7 +24,6 @@ class Municipe < ApplicationRecord
                               message: 'Sem caracteres. Formato correto: 5561920304050' },
     presence: true
 
-  after_create :welcome_email
   after_save :information_updates_email, :enqueue_job_elastic_search
   after_save :send_sms
 
@@ -47,10 +46,6 @@ class Municipe < ApplicationRecord
   end
 
   private
-
-  def welcome_email
-    MunicipeMailer.with(municipe: self).welcome.deliver_later
-  end
 
   def information_updates_email
     MunicipeMailer.with(municipe: self).info_changed.deliver_later

@@ -107,7 +107,18 @@ async function submitForm() {
       toast.success(t('municipe.create.success'));
     }
   } catch (error) {
-    console.error(error);
+    const errors = error.response.data.errors;
+
+    if (Object.keys(errors).length === 0) {
+      toast.error('Nenhum erro encontrado.');
+    } else {
+      Object.keys(errors).forEach(key => {
+        const errorMessage = errors[key];
+        const message = `Campo: ${key} com erros ${errorMessage}`
+
+        toast.error(message, { duration: 4000 });
+      });
+    }
   }
 }
 </script>
