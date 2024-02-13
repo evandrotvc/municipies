@@ -20,12 +20,17 @@ class Municipe < ApplicationRecord
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :cns, cns: true
   validates :birth_date, pass_date: true
-  validates :phone, format: { with: /\A\d+\z/,
-                              message: 'Sem caracteres. Formato correto: 5561920304050' },
-    presence: true
+  validates :phone, presence: true
+  validate :phone_format
 
   after_save :information_updates_email, :enqueue_job_elastic_search
   after_save :send_sms
+
+  def phone_format
+    return if phone.blank? || phone.match?(/\A\d+\z/)
+
+    errors.add(:phone, :invalid_format)
+  end
 
   def self.translated_statuses
     statuses.keys.map do |status|
