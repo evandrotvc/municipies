@@ -25,7 +25,7 @@ class Municipe < ApplicationRecord
     presence: true
 
   after_create :welcome_email
-  after_save :information_updates_email
+  after_save :information_updates_email, :enqueue_job_elastic_search
   after_save :send_sms
 
   def self.translated_statuses
@@ -40,6 +40,10 @@ class Municipe < ApplicationRecord
     indexed_json['ibge_uf'] = address.uf
 
     indexed_json
+  end
+
+  def enqueue_job_elastic_search
+    UpdateIndexElasticSearchJob.perform_later
   end
 
   private
