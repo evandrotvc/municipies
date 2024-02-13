@@ -56,7 +56,7 @@ RAILS_ENV=test rspec
 ```
 
 ### Testes passando
-![alt text](https://github.com/evandrotvc/municipies/blob/main/app/assets/images/tests.png)
+![alt text](image-1.png)
 
 
 ## Uso da plataforma
