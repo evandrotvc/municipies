@@ -1,0 +1,64 @@
+{
+  "title": {
+    "form": "Dados do municipe",
+    "list": "Lista de Municipes"
+  },
+  "fields": {
+    "name": "Nome completo",
+    "cns": "Cartão Nacional de Saúde",
+    "cpf": "CPF",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "birthdate": "Data de nascimento",
+    "address": "Endereço",
+    "street": "Rua",
+    "number": "Número",
+    "complement": "Complemento",
+    "neighborhood": "Bairro",
+    "city": "Cidade",
+    "state": "Estado",
+    "zipcode": "CEP",
+    "ibge": "Código IBGE",
+    "photo": "Foto"
+  },
+  "validations": {
+    "cpf": "CPF inválido.",
+    "required": "Campo obrigatório.",
+    "email": "E-mail inválido.",
+    "chars": "Este campo deve ter exatamente { length } caracteres."
+  },
+  "placeholders": {
+    "name": "Digite seu nome completo",
+    "cns": "Cartão Nacional de Saúde",
+    "cpf": "Digite seu CPF",
+    "email": "Digite seu email",
+    "phone": "+00 (00) 00000-0000",
+    "birthdate": "dia/mês/ano - 01/01/1990",
+    "address": "Digite seu endereço",
+    "street": "Digite o nome da rua",
+    "number": "Digite seu número",
+    "complement": "Complemento",
+    "neighborhood": "Bairro",
+    "city": "Cidade",
+    "state": "Estado",
+    "zipcode": "CEP",
+    "ibge": "Código IBGE",
+    "active": "Ativo",
+    "inactive": "Inativo"
+  },
+  "municipe": {
+    "create": {
+      "success": "Municipe salvo com sucesso!",
+      "error": "Erro ao salvar municipe."
+    },
+    "cns": "CNS: {cns}"
+  },
+  "actions": {
+    "save": "Salvar",
+    "create": "Cadastrar municipe",
+    "back": "Voltar",
+    "edit": "Editar",
+    "upload": "Carregar foto",
+    "search": "Buscar municipe" 
+  }
+}
