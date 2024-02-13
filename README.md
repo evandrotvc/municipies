@@ -50,7 +50,7 @@ yarn dev
 
 ## Tests (Rspec)
 
-No terminal, caso queira rodar os testes, basta rodar o comando anterior e o comando a seguir.
+No terminal, caso queira rodar os testes, basta entrar no container do app e executar comando a seguir.
 ```
 RAILS_ENV=test rspec
 ```
