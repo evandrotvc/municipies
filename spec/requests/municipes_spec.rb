@@ -2,14 +2,18 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Municipies' do
+RSpec.describe Municipe do
   let(:json) { response.parsed_body }
 
   describe 'GET index' do
     let!(:municipes) { create_list(:municipe, 3) }
     let(:request) { get municipes_path, as: :json }
 
-    before { request }
+    before do
+      municipes.map { |municipe| municipe.__elasticsearch__.index_document }
+      described_class.__elasticsearch__.refresh_index!
+      request
+    end
 
     it 'returns http success' do
       expect(response).to have_http_status(:ok)
@@ -80,10 +84,10 @@ RSpec.describe 'Municipies' do
 
     context 'when municipe is valid' do
       it 'creates municipe' do
-        expect { request }.to change(Municipe, :count).by(1)
+        expect { request }.to change(described_class, :count).by(1)
         expect(response).to have_http_status(:created)
 
-        municipe_recorded = Municipe.find_by(name: 'Anakim Vader')
+        municipe_recorded = described_class.find_by(name: 'Anakim Vader')
         expect(json['municipe']['name']).to eq(municipe_params[:name])
         expect(json['municipe']['cpf']).to eq(municipe_params[:cpf])
         expect(json['municipe']['cns']).to eq(municipe_params[:cns])

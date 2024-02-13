@@ -54,6 +54,9 @@ gem 'simple_form', '~> 5.1.0'
 gem 'sidekiq', '~> 6.2.2'
 gem 'twilio-ruby'
 
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 # gem "image_processing", "~> 1.2"
@@ -87,6 +90,7 @@ group :test do
   gem 'brakeman'
   gem 'bundler-audit'
   gem 'capybara'
+  gem 'database_cleaner'
   gem 'database_cleaner-active_record', '~> 2.0.1'
   gem 'selenium-webdriver'
   gem 'simplecov', require: false

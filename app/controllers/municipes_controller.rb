@@ -7,8 +7,7 @@ class MunicipesController < ApplicationController
     if params[:query].present?
       query = params[:query].downcase
       query = I18n.transliterate(query)
-      @municipes = Municipe.where('lower(unaccent(name)) ilike ?',
-        "%#{query}%").order_by_name
+      @municipes = Municipe.search(query)
     else
       @municipes = Municipe.order_by_name
     end
@@ -27,6 +26,8 @@ class MunicipesController < ApplicationController
     process_base64_photo if photo_params[:data].present?
 
     if @municipe.save
+      MunicipeMailer.with(municipe: @municipe).welcome.deliver_later
+
       render :show, status: :created
     else
       render :errors, status: :unprocessable_entity

@@ -1,0 +1,12 @@
+development: &default
+  host: '<%= ENV['ELASTICSEARCH_URL'] || 'http://localhost:9200' %>'
+  request_timeout: 600
+test:
+  <<: *default
+staging:
+  <<: *default
+production_local:
+  <<: *default
+production:
+  <<: *default
+  host: "https://<%= ENV['ELASTICSEARCH_URL'] %>:443"

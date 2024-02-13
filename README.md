@@ -14,7 +14,10 @@ Setando o .env
 ```
 copie o arquivo .env.test com o nome .env
 ```
-depois rode
+depois rode o comando para liberar espaço para o elastic search
+```
+sudo sysctl -w vm.max_map_count=262144
+```
 ```
 docker compose build
 ```
@@ -43,7 +46,15 @@ No terminal, caso queira rodar os testes, basta rodar o comando anterior e o com
 rspec
 ```
 
+### Testes passando
+![alt text](image.png)
 
+
+## Uso da plataforma
+
+
+### Tooltips de erros de validações
+![alt text](image-1.png)
 
 ## Examples
 - Mailer
