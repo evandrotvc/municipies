@@ -47,14 +47,15 @@ rspec
 ```
 
 ### Testes passando
-![alt text](image.png)
+![alt text](https://github.com/evandrotvc/municipies/blob/main/app/assets/images/tests.png)
 
 
 ## Uso da plataforma
+![alt text](https://github.com/evandrotvc/municipies/blob/main/app/assets/videos/TesteProjeto.mp4)
 
 
 ### Tooltips de erros de validações
-![alt text](image-1.png)
+![alt text](https://github.com/evandrotvc/municipies/blob/main/app/assets/images/toast_test.png)
 
 ## Examples
 - Mailer
