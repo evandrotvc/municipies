@@ -3,5 +3,5 @@
 class Address < ApplicationRecord
   belongs_to :municipe
 
-  validates :zipcode, :street, :complement, :neighborhood, :city, :uf, presence: true
+  validates :zipcode, :street, :neighborhood, :city, :uf, presence: true
 end
