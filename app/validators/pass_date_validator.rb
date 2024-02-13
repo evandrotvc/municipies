@@ -2,13 +2,9 @@
 
 class PassDateValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
-    return if value.blank?
+    return unless value.present? && value > Date.current
 
-    if value > Date.current
-      message = options[:message] || :pass_date
-      record.errors.add(attribute, message)
-    elsif value.year < 1900 || value.year > Date.current.year
-      record.errors.add(attribute, :invalid_date)
-    end
+    message = options[:message] || :pass_date
+    record.errors.add(attribute, message)
   end
 end

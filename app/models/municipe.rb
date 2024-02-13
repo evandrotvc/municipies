@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Municipe < ApplicationRecord
+  include Searchable
+
   has_one_attached :photo
 
   has_one :address, dependent: :destroy
@@ -11,31 +13,36 @@ class Municipe < ApplicationRecord
 
   scope :order_by_name, -> { order(:name) }
 
-  validates :name, :cpf, :cns, :email, :birth_date, :status, :photo, :phone,
+  validates :name, :cpf, :cns, :email, :birth_date, :status, :photo,
     presence: true
   validates :name, length: { minimum: 3 }
   validates :cpf, cpf: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :cns, cns: true
   validates :birth_date, pass_date: true
-  validates :phone, presence: true
-  validate :phone_format
+  validates :phone, format: { with: /\A\d+\z/,
+                              message: 'Sem caracteres. Formato correto: 5561920304050' },
+    presence: true
 
   after_create :welcome_email
   after_save :information_updates_email
   after_save :send_sms
-
-  def phone_format
-    return if phone.blank? || phone.match?(/\A\d+\z/)
-
-    errors.add(:phone, :invalid_format)
-  end
 
   def self.translated_statuses
     statuses.keys.map do |status|
       [I18n.t("activerecord.attributes.municipe.statuses.#{status}"), status]
     end
   end
+
+  def as_indexed_json(_options = {})
+    indexed_json = as_json(except: %i[created_at updated_at photo])
+    indexed_json['ibge_code'] = address.ibge_code
+    indexed_json['ibge_uf'] = address.uf
+
+    indexed_json
+  end
+
+  private
 
   def welcome_email
     MunicipeMailer.with(municipe: self).welcome.deliver_later

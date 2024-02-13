@@ -3,11 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe 'Municipies' do
-  let(:json) { response.parsed_body }
-
-  describe 'GET index' do
+  describe 'GET /municipies' do
     let!(:municipes) { create_list(:municipe, 3) }
-    let(:request) { get municipes_path, as: :json }
+    let(:request) { get municipes_path }
 
     before { request }
 
@@ -20,9 +18,7 @@ RSpec.describe 'Municipies' do
     end
 
     context 'when query is present' do
-      let(:request) do
-        get municipes_path, params: { query: municipes.first.name }, as: :json
-      end
+      let(:request) { get municipes_path, params: { query: municipes.first.name } }
 
       it 'returns http success' do
         expect(response).to have_http_status(:ok)
@@ -35,9 +31,9 @@ RSpec.describe 'Municipies' do
     end
   end
 
-  describe 'Show /municipies/:id' do
+  describe 'GET /municipies/:id' do
     let!(:municipe) { create(:municipe) }
-    let(:request) { get municipe_path(municipe), as: :json }
+    let(:request) { get municipe_path(municipe) }
 
     before { request }
 
@@ -46,52 +42,31 @@ RSpec.describe 'Municipies' do
     end
 
     it 'returns municipe' do
-      expect(json['municipe']['name']).to eq(municipe.name)
-      expect(json['municipe']['cpf']).to eq(municipe.cpf)
-      expect(json['municipe']['cns']).to eq(municipe.cns)
+      expect(response.body).to include(municipe.name)
     end
+  end
 
-    it 'with the link for details' do
-      expect(json['municipe']['links']['self']).to eq(municipe_path(municipe))
-    end
+  describe 'GET /municipies/new' do
+    let(:request) { get new_municipe_path }
 
-    it 'with the link for photo file' do
-      expect(
-        json['municipe']['photo']
-      ).to eq(Base64.strict_encode64(municipe.photo.download))
+    before { request }
+
+    it 'returns http success' do
+      expect(response).to have_http_status(:ok)
     end
   end
 
   describe 'POST /municipies' do
     let(:address_params) { attributes_for(:address) }
-    let(:photo_params) do
-      { data: Base64.strict_encode64(
-        Rails.root.join('spec/support/images/selfie.png').read
-      ) }
-    end
     let(:municipe_params) do
-      attributes_for(:municipe, name: 'Anakim Vader',
-        photo: nil).merge(address_attributes: address_params)
+      attributes_for(:municipe).merge(address_attributes: address_params)
     end
-    let(:request) do
-      post municipes_path, params: { municipe: municipe_params, photo: photo_params },
-        headers: { accept: 'application/json' }
-    end
+    let(:request) { post municipes_path, params: { municipe: municipe_params } }
 
     context 'when municipe is valid' do
       it 'creates municipe' do
         expect { request }.to change(Municipe, :count).by(1)
-        expect(response).to have_http_status(:created)
-
-        municipe_recorded = Municipe.find_by(name: 'Anakim Vader')
-        expect(json['municipe']['name']).to eq(municipe_params[:name])
-        expect(json['municipe']['cpf']).to eq(municipe_params[:cpf])
-        expect(json['municipe']['cns']).to eq(municipe_params[:cns])
-        expect(json['municipe']['phone']).to eq(municipe_params[:phone])
-        expect(json['municipe']['email']).to eq(municipe_params[:email])
-        expect(json['municipe']['status'].to_sym).to eq(municipe_params[:status].to_sym)
-        expect(json['municipe']['photo']).not_to be_nil
-        expect(municipe_recorded.photo).to be_attached
+        expect(response).to have_http_status(:ok)
       end
     end
 
@@ -108,22 +83,22 @@ RSpec.describe 'Municipies' do
     end
   end
 
-  describe 'PUT /municipies/:id' do
-    let!(:municipe) { create(:municipe, name: 'Evandro') }
+  describe 'PATCH /municipies/:id' do
+    let!(:municipe) { create(:municipe) }
     let(:new_params) { attributes_for(:municipe) }
-    let(:request) do
-      put municipe_path(municipe), params: { municipe: new_params },
-        headers: { accept: 'application/json' }
-    end
+    let(:request) { patch municipe_path(municipe), params: { municipe: new_params } }
 
     context 'when municipe is valid' do
-      it 'updates municipe' do
-        expect(municipe.name).to eq('Evandro')
+      before do
         request
+      end
 
-        expect(municipe.reload.name).not_to eq('Evandro')
+      it 'returns http ok' do
         expect(response).to have_http_status(:ok)
-        expect(municipe.name).to eq(new_params[:name])
+      end
+
+      it 'updates municipe' do
+        expect(municipe.reload.name).to eq(new_params[:name])
       end
     end
 
