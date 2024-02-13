@@ -52,7 +52,7 @@ yarn dev
 
 No terminal, caso queira rodar os testes, basta rodar o comando anterior e o comando a seguir.
 ```
-rspec
+RAILS_ENV=test rspec
 ```
 
 ### Testes passando
