@@ -41,7 +41,7 @@ Agora é possível entrar no http://localhost:3000/ e realizar os testes se todo
 
 ### Executando o front Vuejs
 
-É necessário ir na pasta /frontend e executar, os seguintes comandos fora do container. Utilizei a versão do Node 18.13.0
+É necessário ir na pasta /frontend e executar, os seguintes comandos fora do container. Utilizei a versão do Node 18.3.0
 
 ```
 yarn
