@@ -6,6 +6,8 @@ pt-BR:
           attributes:
             phone:
               invalid_format: "Formato inválido. O formato correto é: 5561920304050"
+            birth_date:
+              invalid_date: "Data de Nascimento inválida"
     models:
       municipe:
         one: Munícipe
